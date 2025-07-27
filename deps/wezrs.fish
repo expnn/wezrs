@@ -1,4 +1,18 @@
-if status is-interactive; and type -q base64; and type -q trzsz
+
+if status is-interactive
+    # Check for required commands and report missing ones
+    set -l missing_commands
+    for cmd in base64 trzsz jq
+        if not type -q $cmd
+            set -a missing_commands $cmd
+        end
+    end
+
+    if test (count $missing_commands) -gt 0
+        echo "wezrs: Missing required commands: $missing_commands. Please install them to enable file transfer functionality." >&2
+        return 0
+    end
+
     function __wezrs_get_base64_version
         if not set -q WEZRS_BASE64_VERSION
             set -xg WEZRS_BASE64_VERSION (base64 --version  2> /dev/null)

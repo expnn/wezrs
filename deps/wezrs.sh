@@ -7,8 +7,22 @@
 
 # Ensure the script is sourced, not executed, and only in interactive shells.
 # Also check for required commands: base64 and trzsz.
-if ! [ -t 1 ] || ! command -v base64 >/dev/null || ! command -v trzsz >/dev/null; then
-    return 1
+if ! [ -t 1 ]; then
+    # When sourced (not executed), return success (0) to avoid breaking other init scripts
+    return 0
+fi
+
+# Check for required commands and report missing ones
+missing_commands=()
+for cmd in base64 trzsz jq; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        missing_commands+=("$cmd")
+    fi
+done
+
+if [ ${#missing_commands[@]} -gt 0 ]; then
+    echo "wezrs: Missing required commands: ${missing_commands[*]}. Please install them to enable file transfer functionality." >&2
+    return 0
 fi
 
 # Memoize the base64 version string to avoid repeated calls.
