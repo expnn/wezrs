@@ -60,6 +60,8 @@ Currently, this tool only supports Unix-like systems with the `fish` shell. Supp
    - `base64`: In most distributions, `base64` is installed by default. Users can use `base64 -h` to test if it works. 
 2. Install the shell init script. 
    - For `fish`, download [wezrs.fish](https://raw.githubusercontent.com/expnn/wezrs/master/deps/wezrs.fish), and put it in the `$HOME/.config/fish/conf.d/` directory on the remote machine. Restart the shell or source this file to apply the changes.
+   - For `bash` or `zsh`, download [wezrs.bash](https://raw.githubusercontent.com/expnn/wezrs/master/deps/wezrs.sh), 
+     and put it anywhere you prefer on the remote machine and source it in the `~/.bashrc` or `~/.zshrc` file, respectively. Restart the shell or source this file to apply the changes.
 3. Configure wezterm: add the following snippet to the wezterm configuration file on the local machine.
    ```lua
    wezterm.plugin.require("https://github.com/expnn/wezrs").apply_to_config(config, {
