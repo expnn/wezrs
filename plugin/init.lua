@@ -65,8 +65,15 @@ function M.apply_to_config(config, opts)
         --      "user": "username to login to the remote server", 
         --      "host": "hostname of the remote server"
         --   }
-        
-        local args = wezterm.serde.json_decode(serialized_args)
+
+        local json_decode = nil
+        if wezterm.serde ~= nil then
+            json_decode = wezterm.serde.json_decode
+        else
+            json_decode = wezterm.json_parse
+        end
+
+        local args = json_decode(serialized_args)
         wezterm.log_info("[wezrs] wez_file_transfer args: ", args)
     
         local trzsz_cmd = opts.trzsz_cmd
@@ -112,7 +119,7 @@ function M.apply_to_config(config, opts)
                 wezterm.log_error("[wezrs] It seems failed to login the remove server. quit.")
                 window:perform_action(wezterm.action.CloseCurrentPane { confirm = true }, new_pane)
                 pane:activate()
-                pane:send_text("# Some error occurs to login to the remote server. Quit the transmission. Please opne the debug overlay to see the logs.")
+                pane:send_text("# Some error occurs to login to the remote server. Quit the transmission. Please open the debug overlay to see the logs.")
                 return true
             end
         else
